@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from main.models import *
-from rest_framework import generics
+from rest_framework import viewsets
 from .serializers import AlarmsSerializer
 import rsa
 
-class AlarmList(generics.ListCreateAPIView):
+class AlarmList(viewsets.ReadOnlyModelViewSet):
     serializer_class = AlarmsSerializer
     
     @staticmethod
