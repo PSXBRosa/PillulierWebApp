@@ -1,27 +1,24 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from main.models import *
-from rest_framework import viewsets
-from .serializers import AlarmsSerializer
-import rsa
+from rest_framework.views import APIView
+from .serializers import EncryptedAlarmsSerializer, AlarmsSerializer
+from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
-class AlarmList(viewsets.ReadOnlyModelViewSet):
+class AlarmList(APIView):
     serializer_class = AlarmsSerializer
-    
-    @staticmethod
-    def _confirm_identity(public_key):
-        # NOTE Since the query parameters get HTTP decoded, all the
-        # "+" signs in the request MUST be encoded as "%2B"
-        obj = get_object_or_404(Machine, pubk=public_key)
-        return obj
+    permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        pubk = self.request.query_params.get('pubk', False)
-        if pubk:
-            mach = self._confirm_identity(pubk)
-            queryset = Alarm.objects.filter(mach=mach)
-            return queryset
-        else:
-            raise Http404
+    def get(self, request, format=None):
+        content = self.get_queryset(request)
+        content = AlarmList.serializer_class(content,many=True).data
+        return Response(content)
+
+    def get_queryset(self, request):
+        mach = get_object_or_404(Machine, owner=request.user)
+        queryset = Alarm.objects.filter(mach=mach)
+        return queryset
             
 

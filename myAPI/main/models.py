@@ -28,7 +28,7 @@ class Alarm(models.Model):
     name = models.CharField(max_length=255, unique=True)                    # name of the alarm
     cr_t = models.DateTimeField(auto_now_add=True)                          # time of creation of the alarm
     time = models.TimeField()                                               # time set for the alarm
-    mode = models.JSONField(default=default_mode)                         # mode of the alarm (e.g. 'SAT')
+    mode = models.JSONField(default=default_mode)                           # mode of the alarm (e.g. 'SAT')
     mach = models.ForeignKey(Machine, on_delete=models.CASCADE)             # machine vinculated to the alarm
     meds = models.ManyToManyField(Drug, through="DrugsOnAlarm" ,blank=True) # drugs set for this alarm
 
