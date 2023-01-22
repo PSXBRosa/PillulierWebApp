@@ -14,7 +14,8 @@ class Alarm(models.Model):
     cr_t = models.DateTimeField(auto_now_add=True)                              # time of creation of the alarm
     mode = models.TextField(null=True, blank=True)                              # Aditional information
     time = models.DateTimeField()                                               # time set for the alarm
-    meds = models.ManyToManyField(Drug, through="DrugsOnAlarm" , null=True, blank=True) # drugs set for this alarm
+    m_med = models.TextField(null=True, blank=True)                             # medication name
+    quant = models.IntegerField(null=True, blank=True)                        # medication quantity
 
 
 class DrugsOnAlarm(models.Model):

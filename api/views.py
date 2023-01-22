@@ -11,7 +11,6 @@ from rest_framework import status
 
 class AlarmList(APIView):
     serializer_class = AlarmsSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         content = self.get_queryset(request)
@@ -24,7 +23,6 @@ class AlarmList(APIView):
 
 class AlarmPost(APIView):
     serializer_class = AlarmsSerializer
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
         serializer = AlarmPost.serializer_class(data=request.data)
@@ -35,7 +33,6 @@ class AlarmPost(APIView):
 
 class AlarmEdit(APIView):
     serializer_class = AlarmsSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         obj =  Alarm.objects.get(pk=pk)
